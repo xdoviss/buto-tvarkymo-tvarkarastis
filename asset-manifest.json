@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/buto-tvarkymo-tvarkarastis/static/css/main.20341a15.css",
+    "main.js": "/buto-tvarkymo-tvarkarastis/static/js/main.c1b388c0.js",
+    "index.html": "/buto-tvarkymo-tvarkarastis/index.html",
+    "main.20341a15.css.map": "/buto-tvarkymo-tvarkarastis/static/css/main.20341a15.css.map",
+    "main.c1b388c0.js.map": "/buto-tvarkymo-tvarkarastis/static/js/main.c1b388c0.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.20341a15.css",
+    "static/js/main.c1b388c0.js"
+  ]
+}
