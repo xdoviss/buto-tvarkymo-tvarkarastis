@@ -1,7 +1,7 @@
 {
   "name": "butas",
   "version": "0.1.0",
-  "homepage": "http://podinskas.lt",
+  "homepage": "https://podinskas.lt",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
