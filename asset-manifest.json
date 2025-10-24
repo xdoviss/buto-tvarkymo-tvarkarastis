@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/buto-tvarkymo-tvarkarastis/static/css/main.afa4d290.css",
+    "main.css": "/buto-tvarkymo-tvarkarastis/static/css/main.70f00b2c.css",
     "main.js": "/buto-tvarkymo-tvarkarastis/static/js/main.c1b388c0.js",
     "index.html": "/buto-tvarkymo-tvarkarastis/index.html",
-    "main.afa4d290.css.map": "/buto-tvarkymo-tvarkarastis/static/css/main.afa4d290.css.map",
+    "main.70f00b2c.css.map": "/buto-tvarkymo-tvarkarastis/static/css/main.70f00b2c.css.map",
     "main.c1b388c0.js.map": "/buto-tvarkymo-tvarkarastis/static/js/main.c1b388c0.js.map"
   },
   "entrypoints": [
-    "static/css/main.afa4d290.css",
+    "static/css/main.70f00b2c.css",
     "static/js/main.c1b388c0.js"
   ]
 }
