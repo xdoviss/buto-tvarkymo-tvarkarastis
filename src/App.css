@@ -328,3 +328,25 @@ input[type="checkbox"]:hover {
     margin-bottom: 0.7rem;
   }
 }
+
+/* Quick overrides to prevent horizontal shift and ensure container centered on mobile */
+body {
+  overflow-x: hidden;
+}
+
+.container {
+  width: min(420px, calc(100% - 48px));
+  margin: 24px auto;
+}
+
+@media screen and (max-width: 480px) {
+  /* Final override to force simplified mobile layout */
+  .container {
+    width: calc(100% - 24px) !important;
+    margin: 12px auto !important;
+    min-height: auto !important;
+  }
+  .container::before {
+    display: none !important;
+  }
+}
