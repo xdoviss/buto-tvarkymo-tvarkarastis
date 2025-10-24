@@ -265,7 +265,6 @@ input[type="checkbox"]:hover {
   box-shadow: 0 6px 20px rgba(0,0,0,0.15);
 }
 
-/* Mobile Responsiveness */
 @media screen and (max-width: 480px) {
   .container {
     padding: 1.5rem;
@@ -329,7 +328,6 @@ input[type="checkbox"]:hover {
   }
 }
 
-/* Quick overrides to prevent horizontal shift and ensure container centered on mobile */
 body {
   overflow-x: hidden;
 }
@@ -340,7 +338,12 @@ body {
 }
 
 @media screen and (max-width: 480px) {
-  /* Final override to force simplified mobile layout */
+  body {
+    display: block !important;
+    padding: 12px 0 !important;
+    animation: none !important;
+    background: linear-gradient(180deg, #0f1720, #15232b) !important;
+  }
   .container {
     width: calc(100% - 24px) !important;
     margin: 12px auto !important;
