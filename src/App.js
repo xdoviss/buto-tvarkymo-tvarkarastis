@@ -12,7 +12,7 @@ export default function App() {
     (today - startDate) / (1000 * 60 * 60 * 24 * 14)
   );
   const currentCleaner =
-    flatmates[((diffWeeks % flatmates.length) + flatmates.length) % flatmates.length];
+    flatmates[((diffWeeks % flatmates.length) + flatmates.length - 1) % flatmates.length];
 
   const [checklist, setChecklist] = useState({
     "Bendra": {
