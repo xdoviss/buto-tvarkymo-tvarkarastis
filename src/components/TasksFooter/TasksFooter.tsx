@@ -12,7 +12,7 @@ export const TasksFooter: React.FC<TasksFooterProps> = ({
   return (
     <footer className="tasks-footer">
       {unchecked === 0 ? (
-        <p>🎉 Namai tvarkingi, yippie!</p>
+        <button>🎉 Pranešti apie tvarkymo pabaigą</button>
       ) : (
         <p>
           📝 Liko sutvarkyti {unchecked}/{total}

@@ -42,6 +42,29 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
+button {
+  margin: 0;
+  padding: 1rem;
+  width: 100%;
+  font-size: 1rem;
+  background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.1),
+      rgba(255, 255, 255, 0.05));
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(0);
+  transition: all 0.3s ease;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
 @media screen and (max-width: 480px) {
   .tasks-footer {
     margin-top: 1.5rem;
