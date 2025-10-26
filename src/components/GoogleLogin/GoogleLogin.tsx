@@ -26,7 +26,12 @@ const GoogleLogin: React.FC<GoogleLoginProps> = ({ onSuccess, onError }) => {
     if (!token) return onError(new Error("No credential returned"));
     const profile = decodeJwt(token);
     if (!profile) return onError(new Error("Failed to decode token"));
-    onSuccess(profile);
+    
+    if (import.meta.env.VITE_ALLOWED_USER_LIST?.split(",").includes(profile.email)) {
+      onSuccess(profile);
+    } else {
+      onError(new Error("User not allowed"));
+    }
   };
 
   return (
