@@ -1,3 +1,5 @@
+import "./TasksFooter.css";
+
 interface TasksFooterProps {
   total: number;
   unchecked: number;

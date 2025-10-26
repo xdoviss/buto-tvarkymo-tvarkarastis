@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import { CleanerSection } from "./components/CleanerSection";
-import { ChecklistSection } from "./components/ChecklistSection";
-import { TasksFooter } from "./components/TasksFooter";
+import { CleanerSection } from "./components/CleanerSection/CleanerSection";
+import { ChecklistSection } from "./components/ChecklistSection/ChecklistSection";
+import { TasksFooter } from "./components/TasksFooter/TasksFooter";
 import { Checklist } from "./types";
 import GoogleLogin from "./components/GoogleLogin/GoogleLogin";
 import UserInfo from './components/UserInfo/UserInfo';

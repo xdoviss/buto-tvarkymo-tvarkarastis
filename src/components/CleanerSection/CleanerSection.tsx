@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { TimeRemaining } from "../types";
+import { TimeRemaining } from "../../types";
+import "./CleanerSection.css";
 
 interface CleanerSectionProps {
   nextDeadline: Date;

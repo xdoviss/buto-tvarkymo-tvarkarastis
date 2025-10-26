@@ -1,4 +1,5 @@
-import { Checklist } from "../types";
+import { Checklist } from "../../types";
+import "./ChecklistSection.css";
 
 interface ChecklistSectionProps {
   checklist: Checklist;
