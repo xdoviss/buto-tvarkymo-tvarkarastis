@@ -7,9 +7,11 @@
 }
 
 .user-info button {
-  background: linear-gradient(135deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.04) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
   border-radius: 14px;
   padding: 0rem 1.2rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -19,7 +21,9 @@
 
 .user-info button:hover {
   padding: 0rem 1.4rem;
-  transition: padding 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    padding 0.3s ease,
+    box-shadow 0.3s ease;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 

@@ -5,7 +5,7 @@ import { ChecklistSection } from "./components/ChecklistSection/ChecklistSection
 import { TasksFooter } from "./components/TasksFooter/TasksFooter";
 import { Checklist } from "./types";
 import GoogleLogin from "./components/GoogleLogin/GoogleLogin";
-import UserInfo from './components/UserInfo/UserInfo';
+import UserInfo from "./components/UserInfo/UserInfo";
 
 const INITIAL_CHECKLIST: Checklist = {
   Bendra: {

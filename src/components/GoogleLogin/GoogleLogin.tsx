@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  GoogleLogin as RawGoogleLogin,
+  GoogleLogin as GoogleLoginComponent,
   CredentialResponse,
 } from "@react-oauth/google";
 import "./GoogleLogin.css";
@@ -31,9 +31,13 @@ const GoogleLogin: React.FC<GoogleLoginProps> = ({ onSuccess, onError }) => {
 
   return (
     <div className="google-login-wrapper">
-      <RawGoogleLogin
+      <GoogleLoginComponent
         onSuccess={handleSuccess}
         onError={() => onError(new Error("Google login failed"))}
+        shape="pill"
+        size="large"
+        width={300}
+        text="signin"
       />
     </div>
   );
