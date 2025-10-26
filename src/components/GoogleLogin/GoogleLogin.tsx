@@ -1,51 +1,51 @@
 import React from "react";
-import {
-  GoogleLogin as GoogleLoginComponent,
-  CredentialResponse,
-} from "@react-oauth/google";
 import "./GoogleLogin.css";
+import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from "../../firebase";
 
-interface GoogleLoginProps {
+interface GoogleAuthProps {
   onSuccess: (user: any) => void;
   onError: (err: any) => void;
 }
 
-function decodeJwt(token: string) {
-  try {
-    const payload = token.split(".")[1];
-    const decoded = atob(payload.replace(/-/g, "+").replace(/_/g, "/"));
-    return JSON.parse(decodeURIComponent(escape(decoded)));
-  } catch (e) {
-    return null;
-  }
-}
+const GoogleAuth: React.FC<GoogleAuthProps> = ({ onSuccess, onError }) => {
+  const handleLogin = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
 
-const GoogleLogin: React.FC<GoogleLoginProps> = ({ onSuccess, onError }) => {
-  const handleSuccess = (credentialResponse: CredentialResponse) => {
-    const token = credentialResponse.credential;
-    if (!token) return onError(new Error("No credential returned"));
-    const profile = decodeJwt(token);
-    if (!profile) return onError(new Error("Failed to decode token"));
-    
-    if (import.meta.env.VITE_ALLOWED_USER_LIST?.split(",").includes(profile.email)) {
-      onSuccess(profile);
-    } else {
-      onError(new Error("User not allowed"));
+      const user = result.user;
+
+      const allowed = import.meta.env.VITE_ALLOWED_USER_LIST?.split(",") || [];
+      if (allowed.length > 0 && !allowed.includes(user.email ?? "")) {
+        await auth.signOut();
+        throw new Error("User not allowed");
+      }
+
+      onSuccess({
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+        uid: user.uid,
+      });
+    } catch (error) {
+      console.error("Firebase login error:", error);
+      onError(error);
     }
   };
 
   return (
     <div className="google-login-wrapper">
-      <GoogleLoginComponent
-        onSuccess={handleSuccess}
-        onError={() => onError(new Error("Google login failed"))}
-        shape="pill"
-        size="large"
-        width={300}
-        text="signin"
-      />
+      <button className="google-login-button" onClick={handleLogin}>
+        <img
+          src="https://developers.google.com/identity/images/g-logo.png"
+          alt="Google logo"
+          style={{ width: 20, height: 20, marginRight: 8 }}
+        />
+        Prisijungti su Google
+      </button>
     </div>
   );
 };
 
-export default GoogleLogin;
+export default GoogleAuth;

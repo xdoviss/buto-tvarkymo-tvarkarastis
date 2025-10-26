@@ -1,11 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import { CleanerSection } from "./components/CleanerSection/CleanerSection";
 import { ChecklistSection } from "./components/ChecklistSection/ChecklistSection";
 import { TasksFooter } from "./components/TasksFooter/TasksFooter";
 import { Checklist } from "./types";
-import GoogleLogin from "./components/GoogleLogin/GoogleLogin";
+import GoogleAuth from "./components/GoogleLogin/GoogleLogin";
 import UserInfo from "./components/UserInfo/UserInfo";
+import { db } from "./firebase";
+import { doc, onSnapshot, setDoc } from "firebase/firestore";
+
+const SECTION_ORDER = [
+  "Bendra",
+  "Virtuvė",
+  "Tualetas",
+  "Vonios kambarys",
+  "Koridorius",
+];
 
 const INITIAL_CHECKLIST: Checklist = {
   Bendra: {
@@ -78,15 +88,72 @@ const App: React.FC = () => {
   const nextDeadline = new Date("2025-10-26T23:59:59");
   const [checklist, setChecklist] = useState<Checklist>(INITIAL_CHECKLIST);
   const [user, setUser] = useState<any | null>(null);
+  const saveTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const checklistRef = doc(db, "checklists", "main");
 
   useEffect(() => {
     try {
       const raw = sessionStorage.getItem("auth_user");
       if (raw) setUser(JSON.parse(raw));
-    } catch (e) {
+    } catch {
       // ignore
     }
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(checklistRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.data() as Checklist;
+
+        const orderedChecklist = Object.fromEntries(
+          SECTION_ORDER.map((key) => [
+            key,
+            data[key] ?? INITIAL_CHECKLIST[key],
+          ]),
+        );
+
+        setChecklist(orderedChecklist);
+      } else {
+        setDoc(checklistRef, INITIAL_CHECKLIST);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const saveChecklist = (newChecklist: Checklist) => {
+    setChecklist(newChecklist);
+    if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    saveTimeout.current = setTimeout(async () => {
+      await setDoc(checklistRef, newChecklist);
+    }, 500); // delay 0.5s after last change
+  };
+
+  const handleCheck = (category: string, item: string): void => {
+    const newChecklist = {
+      ...checklist,
+      [category]: {
+        ...checklist[category],
+        items: {
+          ...checklist[category].items,
+          [item]: !checklist[category].items[item],
+        },
+      },
+    };
+    saveChecklist(newChecklist);
+  };
+
+  const toggleExpand = (category: string): void => {
+    const newChecklist = {
+      ...checklist,
+      [category]: {
+        ...checklist[category],
+        expanded: !checklist[category].expanded,
+      },
+    };
+    saveChecklist(newChecklist);
+  };
 
   const startDate = new Date("2025-10-26");
   const today = new Date();
@@ -97,29 +164,6 @@ const App: React.FC = () => {
     flatmates[
       ((diffWeeks % flatmates.length) + flatmates.length - 1) % flatmates.length
     ];
-
-  const handleCheck = (category: string, item: string): void => {
-    setChecklist((prev) => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        items: {
-          ...prev[category].items,
-          [item]: !prev[category].items[item],
-        },
-      },
-    }));
-  };
-
-  const toggleExpand = (category: string): void => {
-    setChecklist((prev) => ({
-      ...prev,
-      [category]: {
-        ...prev[category],
-        expanded: !prev[category].expanded,
-      },
-    }));
-  };
 
   const getRemainingTasks = (): { total: number; unchecked: number } => {
     let total = 0;
@@ -150,12 +194,12 @@ const App: React.FC = () => {
         }}
       >
         <h1>Buto tvarkymo tvarkaraštis</h1>
-        <GoogleLogin
+        <GoogleAuth
           onSuccess={(resp: any) => {
             setUser(resp);
             try {
               sessionStorage.setItem("auth_user", JSON.stringify(resp));
-            } catch (e) {}
+            } catch {}
           }}
           onError={(err: any) => {
             console.error("Google login error", err);
@@ -170,7 +214,7 @@ const App: React.FC = () => {
     setUser(null);
     try {
       sessionStorage.removeItem("auth_user");
-    } catch (e) {}
+    } catch {}
   };
 
   return (
