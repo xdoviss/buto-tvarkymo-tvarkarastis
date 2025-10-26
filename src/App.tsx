@@ -131,15 +131,7 @@ const App: React.FC = () => {
   };
 
   const handleCheck = (category: string, item: string): void => {
-    if (
-      user.email !==
-      (currentCleaner === "Rokas"
-        ? import.meta.env.VITE_FLATMATE_ROKAS
-        : currentCleaner === "Guoda"
-          ? import.meta.env.VITE_FLATMATE_GUODA
-          : import.meta.env.VITE_FLATMATE_DOVYDAS)
-    )
-      return;
+    if (!user?.email?.toLowerCase().includes(currentCleaner.toLowerCase())) return;
 
     const newChecklist = {
       ...checklist,

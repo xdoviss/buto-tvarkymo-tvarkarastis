@@ -16,12 +16,6 @@ const GoogleAuth: React.FC<GoogleAuthProps> = ({ onSuccess, onError }) => {
 
       const user = result.user;
 
-      const allowed = import.meta.env.VITE_ALLOWED_USER_LIST?.split(",") || [];
-      if (allowed.length > 0 && !allowed.includes(user.email ?? "")) {
-        await auth.signOut();
-        throw new Error("User not allowed");
-      }
-
       onSuccess({
         name: user.displayName,
         email: user.email,
