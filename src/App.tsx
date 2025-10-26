@@ -7,7 +7,7 @@ import { Checklist } from "./types";
 import GoogleAuth from "./components/GoogleLogin/GoogleLogin";
 import UserInfo from "./components/UserInfo/UserInfo";
 import { db } from "./firebase";
-import { doc, onSnapshot, setDoc } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, setDoc } from "firebase/firestore";
 
 const SECTION_ORDER = [
   "Bendra",
@@ -90,7 +90,18 @@ const App: React.FC = () => {
   const [user, setUser] = useState<any | null>(null);
   const saveTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  const startDate = new Date("2025-10-26");
+  const today = new Date();
+  const diffWeeks = Math.floor(
+    (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 14),
+  );
+  const currentCleaner =
+    flatmates[
+      ((diffWeeks % flatmates.length) + flatmates.length - 1) % flatmates.length
+    ];
+
   const checklistRef = doc(db, "checklists", "main");
+  const cleanerRef = doc(db, "checklists", "metadata");
 
   useEffect(() => {
     try {
@@ -122,6 +133,27 @@ const App: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const updateCleaner = async () => {
+      try {
+        const metadataSnap = await getDoc(cleanerRef);
+        const previousCleaner = metadataSnap.exists()
+          ? metadataSnap.data().currentCleaner
+          : null;
+
+        // If cleaner changed, reset checklist
+        if (previousCleaner !== currentCleaner) {
+          await setDoc(checklistRef, INITIAL_CHECKLIST);
+          await setDoc(cleanerRef, { currentCleaner });
+        }
+      } catch (err) {
+        console.error("Error updating cleaner metadata:", err);
+      }
+    };
+
+    updateCleaner();
+  }, [currentCleaner]);
+
   const saveChecklist = (newChecklist: Checklist) => {
     setChecklist(newChecklist);
     if (saveTimeout.current) clearTimeout(saveTimeout.current);
@@ -131,7 +163,8 @@ const App: React.FC = () => {
   };
 
   const handleCheck = (category: string, item: string): void => {
-    if (!user?.email?.toLowerCase().includes(currentCleaner.toLowerCase())) return;
+    if (!user?.email?.toLowerCase().includes(currentCleaner.toLowerCase()))
+      return;
 
     const newChecklist = {
       ...checklist,
@@ -156,16 +189,6 @@ const App: React.FC = () => {
     };
     saveChecklist(newChecklist);
   };
-
-  const startDate = new Date("2025-10-26");
-  const today = new Date();
-  const diffWeeks = Math.floor(
-    (today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 14),
-  );
-  const currentCleaner =
-    flatmates[
-      ((diffWeeks % flatmates.length) + flatmates.length - 1) % flatmates.length
-    ];
 
   const getRemainingTasks = (): { total: number; unchecked: number } => {
     let total = 0;
